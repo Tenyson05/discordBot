@@ -22,6 +22,7 @@ bot.on('message', msg => {
 	console.info(`Called command: ${command}`);
 
 	if (!bot.commands.has(command)) return;
+	
 
 	try {
 		bot.commands.get(command).execute(msg, args);
