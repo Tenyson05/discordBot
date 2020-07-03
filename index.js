@@ -3,17 +3,26 @@ const Discord = require('discord.js');
 const bot = new Discord.Client();
 bot.commands = new Discord.Collection();
 const botCommands = require('./commands/exports');
+const fs = require('fs');
 
 Object.keys(botCommands).map(key => {
 	bot.commands.set(botCommands[key].name, botCommands[key]);
 });
 
 const TOKEN = process.env.TOKEN;
+// const PREFIX = process.env.PREFIX;
 
-bot.login(TOKEN);
 
-bot.on('ready', () => {
-	console.info(`Logged in as ${bot.user.tag}!`);
+
+fs.readdir('./events/', (err, files) => {
+	if(err) return console.error;
+	files.forEach(file => {
+		if(!file.endsWith('.js')) return;
+		const evt = require(`./events/${file}`);
+		let evtName = file.split('.')[0];
+		console.log(`Loaded '${evtName}'.`);
+		bot.on(evtName, evt.bind(null, bot));
+	});
 });
 
 bot.on('message', msg => {
@@ -22,6 +31,8 @@ bot.on('message', msg => {
 	console.info(`Called command: ${command}`);
 
 	if (!bot.commands.has(command)) return;
+	// if (msg.author.bot) return;
+	// if (msg.content.indexOf(PREFIX) !== 0) return "Missing prefix";
 	
 
 	try {
@@ -31,3 +42,5 @@ bot.on('message', msg => {
 		msg.reply('There was an error trying to execute that command!');
 	}
 });
+
+bot.login(TOKEN);

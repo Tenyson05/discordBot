@@ -1,8 +1,10 @@
+const PREFIX = process.env.PREFIX;
 
 module.exports = {
-	name: 'kick',
-	description: 'Kicking players',
+	name: PREFIX + 'kick',
+	description: 'Kicking players', 
 	execute(msg, args) {
+		console.log("Entered...");
 		const user = msg.mentions.users.first();
 		if (msg.member.roles.find(r => r.name === 'Jamaica man')) {
 			if (user) {
@@ -13,7 +15,7 @@ module.exports = {
 							msg.reply(`Successfully kicked ${user.tag}`)
 						})
 						.catch(err => {
-							msg.reply('Unable to kick the member');
+							msg.reply(`Unable to kick the member, ${err}`);
 						})
 				} else {
 					console.error(err);

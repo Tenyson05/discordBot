@@ -1,8 +1,10 @@
+const PREFIX = process.env.PREFIX;
+
 module.exports = {
-	name: '!ping',
+	name: PREFIX + 'ping',
 	description: 'Ping',
 	execute(msg, args) {
-		msg.reply('Pong');
+		console.log("Entered...")
 		msg.channel.send('pong');
 	}
 }
