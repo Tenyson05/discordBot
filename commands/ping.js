@@ -1,10 +1,5 @@
-const PREFIX = process.env.PREFIX;
+// const exports = require("./exports");
 
-module.exports = {
-	name: PREFIX + 'ping',
-	description: 'Ping',
-	execute(msg, args) {
-		console.log("Entered...")
-		msg.channel.send('pong');
-	}
+exports.run = (bot, msg, args) => {
+	msg.channel.send("Pong bitch!").catch(console.error);
 }

@@ -1,49 +1,34 @@
-const PREFIX = process.env.PREFIX;
+exports.run = (bot, msg) => {
+	// Make sure the user has the right roll, for now Jamaican man as testing
+	const modRole = msg.guild.roles.find(role => role.name === "Jamaica man");
+	if (!modRole) return console.log(`The required role doesnt exist which is, ${modRole}.`);
 
-module.exports = {
-	name: PREFIX + 'kick',
-	description: 'Kicking players', 
-	execute(msg, args) {
-		console.log("Entered...");
-		const user = msg.mentions.users.first();
-		if (msg.member.roles.find(r => r.name === 'Jamaica man')) {
-			if (user) {
-				const member = msg.guild.member(user)
-				if (member) {
-					member.kick()
-						.then(() => {
-							msg.reply(`Successfully kicked ${user.tag}`)
-						})
-						.catch(err => {
-							msg.reply(`Unable to kick the member, ${err}`);
-						})
-				} else {
-					console.error(err);
-					msg.reply("That user isnt in this place!");
-				}
-			} else {
-				msg.reply("You didnt mention the user to kick!");
-			}
+	// Check to make sure that the user sending the message has the right authority
+	if (!msg.member.roles.has(modRole.id)) return msg.reply("You dont possess the proper privilege");
+
+
+	// Triggers if the user hasn't mention a target
+	// if(msg.mentions.users.size === 0) return msg.reply("Please mention a user to kick");
+
+	// if(!msg.guild.me.hasPermission("KICK_MEMBERS")) return msg.reply("");
+
+	const target = msg.mentions.users.first();
+	if (target) {
+		const kickMember = msg.guild.member(target);
+		if (kickMember) {
+			kickMember
+				.kick()
+				.then(() => {
+					msg.reply(`Successfully kicked ${target.tag}`);
+				})
+				.catch(err => {
+					msg.reply('Unable to perform action');
+					console.error(err)
+				})
 		} else {
-			msg.reply("You do not have permissions")
+			msg.reply("User not available");
 		}
-
+	} else {
+		msg.reply('Please mention a user');
 	}
 }
-
-// if (msg.mentions.users.size) {
-// 	const taggedUser = msg.mentions.users.first();
-// 	if (taggedUser) {
-// 		console.log('HERE', taggedUser)
-// 		taggedUser
-// 		.kick()
-// 		.then(() => {
-// 			msg.reply(`Successfully kicked ${taggedUser.username}`)
-// 		})
-// 	} else {
-// 		msg.reply('Unable to kick user');
-// 		console.error(err)
-// 	}
-// } else {
-// 	msg.reply('Please tag a valid user!');
-// }
