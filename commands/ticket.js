@@ -20,9 +20,9 @@ exports.run = async (bot, msg, messageReaction) => {
 	let ticketLogs = msg.guild.channels.find(c => c.name === 'ticket-logs');
 	const userTicket = new RichEmbed()
 		.setTitle(`${user} Ticket`)
-		.addField('User ID', userID, false )
-		.addField('Reason', ticket, false )
-		.addField('Submitted on', today, false )
+		.addField('User ID:', userID, false )
+		.addField('Reason:', ticket, false )
+		.addField('Submitted on:', today, false )
 		.setColor(0xdd9323)
 	ticketLogs.send(userTicket)
 
